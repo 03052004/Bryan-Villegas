@@ -1,0 +1,10 @@
+# Escritura de Archivo de Texto
+with open("my_notes.txt", "w") as file:
+    file.write("Esta es mi primera nota.\n")
+    file.write("Aprendiendo a manejar archivos en Python.\n")
+    file.write("Recuerda cerrar los archivos después de usarlos.\n")
+
+# Lectura de Archivo de Texto línea por línea
+with open("my_notes.txt", "r") as file:
+    for line in file:  # Leer línea por línea
+        print(line.strip())  # Imprimir la línea sin saltos de línea adicionales
