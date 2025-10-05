@@ -1,0 +1,110 @@
+import tkinter as tk                     # importa la librería Tkinter y la referencia como 'tk'
+from tkinter import messagebox           # importa el módulo messagebox para diálogos (advertencias/info)
+
+class GestorTareas:                      # define la clase principal de la aplicación
+    def __init__(self, root):            # constructor; recibe la ventana raíz (root)
+        self.root = root                 # guarda la referencia de la ventana principal
+        self.root.title("Gestor de Tareas - Tkinter")  # establece el título de la ventana
+        self.root.geometry("400x400")    # fija tamaño inicial de la ventana (anchura x altura)
+        self.root.resizable(False, False) # evita redimensionar la ventana en X e Y
+
+        # ======= Widgets principales =======
+        self.entry_tarea = tk.Entry(root, width=40, font=("Arial", 12))
+                                            # campo de texto donde el usuario escribe la nueva tarea
+        self.entry_tarea.pack(pady=10)    # empaqueta (layout) el Entry con padding vertical
+        self.entry_tarea.focus()          # coloca el foco en el Entry para que el usuario pueda escribir de inmediato
+
+        frame_botones = tk.Frame(root)   # crea un contenedor (frame) para los botones
+        frame_botones.pack(pady=5)       # empaqueta el frame con un poco de separación vertical
+
+        self.boton_agregar = tk.Button(frame_botones, text="Agregar", command=self.agregar_tarea)
+                                            # botón "Agregar" que llama al método agregar_tarea
+        self.boton_agregar.grid(row=0, column=0, padx=5)
+                                            # posiciona el botón dentro del frame usando grid
+
+        self.boton_completar = tk.Button(frame_botones, text="Completar", command=self.marcar_completada)
+                                            # botón "Completar" que llama a marcar_completada
+        self.boton_completar.grid(row=0, column=1, padx=5)
+
+        self.boton_eliminar = tk.Button(frame_botones, text="Eliminar", command=self.eliminar_tarea)
+                                            # botón "Eliminar" que llama a eliminar_tarea
+        self.boton_eliminar.grid(row=0, column=2, padx=5)
+
+        # ======= Lista de tareas =======
+        self.lista_tareas = tk.Listbox(root, width=50, height=15, selectmode=tk.SINGLE, font=("Arial", 10))
+                                            # lista que mostrará las tareas; selectmode SINGLE permite seleccionar solo 1
+        self.lista_tareas.pack(pady=10)    # empaqueta la Listbox con padding
+
+        # ======= Atajos de teclado =======
+        self.root.bind("<Return>", lambda event: self.agregar_tarea())
+                                            # Enter = agregar tarea (se usa lambda para ignorar el parámetro event)
+        self.root.bind("<c>", lambda event: self.marcar_completada())
+                                            # tecla 'c' = marcar completada (nota: distingue mayúsculas/minúsculas)
+        self.root.bind("<d>", lambda event: self.eliminar_tarea())
+                                            # tecla 'd' = eliminar tarea
+        self.root.bind("<Delete>", lambda event: self.eliminar_tarea())
+                                            # tecla Supr/Del = eliminar tarea
+        self.root.bind("<Escape>", lambda event: self.salir())
+                                            # Escape = cerrar la app
+
+        # Almacena el estado de cada tarea (pendiente/completada)
+        self.tareas_completadas = set()     # conjunto de índices de tareas marcadas como completadas
+
+    # ======= Funciones =======
+    def agregar_tarea(self):
+        tarea = self.entry_tarea.get().strip()
+                                            # obtiene el texto del Entry y elimina espacios al inicio/fin
+        if tarea:
+            self.lista_tareas.insert(tk.END, tarea)
+                                            # si hay texto, lo inserta al final de la Listbox
+            self.entry_tarea.delete(0, tk.END)
+                                            # borra el Entry (limpia campo)
+        else:
+            messagebox.showwarning("Aviso", "Debe escribir una tarea antes de agregarla.")
+                                            # si no hay texto, muestra una advertencia al usuario
+
+    def marcar_completada(self):
+        seleccion = self.lista_tareas.curselection()
+                                            # curselection() devuelve una tupla con los índices seleccionados
+        if seleccion:
+            indice = seleccion[0]          # toma el primer (y único) índice seleccionado
+            tarea = self.lista_tareas.get(indice)
+                                            # obtiene el texto de la tarea (aquí solo informativo; no se usa después)
+
+            if indice in self.tareas_completadas:
+                # Si ya estaba completada, la vuelve a pendiente
+                self.lista_tareas.itemconfig(indice, fg="black")
+                                            # cambia el color del texto del ítem a negro
+                self.tareas_completadas.remove(indice)
+                                            # y la quita del conjunto de completadas
+            else:
+                # Marca como completada
+                self.lista_tareas.itemconfig(indice, fg="gray", selectforeground="gray")
+                                            # cambia el color del ítem a gris (y trata de ajustar selectforeground)
+                self.tareas_completadas.add(indice)
+                                            # añade el índice al conjunto de completadas
+        else:
+            messagebox.showinfo("Información", "Seleccione una tarea para marcarla como completada.")
+                                            # si no hay selección, informa al usuario
+
+    def eliminar_tarea(self):
+        seleccion = self.lista_tareas.curselection()
+                                            # obtiene índice seleccionado para eliminar
+        if seleccion:
+            indice = seleccion[0]
+            self.lista_tareas.delete(indice)
+                                            # elimina el ítem de la Listbox
+            self.tareas_completadas.discard(indice)
+                                            # intenta eliminar el índice del conjunto (no lanza error si no existe)
+        else:
+            messagebox.showinfo("Información", "Seleccione una tarea para eliminarla.")
+                                            # si no hay selección, informa al usuario
+
+    def salir(self):
+        self.root.quit()                  # cierra el bucle principal de la aplicación (sale de mainloop)
+
+# ======= Ejecutar la aplicación =======
+if __name__ == "__main__":
+    ventana = tk.Tk()                  # crea la ventana principal
+    app = GestorTareas(ventana)        # instancia la aplicación y le pasa la ventana
+    ventana.mainloop()                 # inicia el bucle de eventos de Tkinter (no llevaba ':' al final)
