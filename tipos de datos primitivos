@@ -1,0 +1,36 @@
+import math  # Importa la librería math para usar el valor de PI
+
+# ============================
+# Clase Circulo
+# ============================
+class Circulo:  # Se define la clase Circulo
+    # Constructor de la clase
+    def __init__(self, radio):  # Método que se ejecuta al crear el objeto
+        self.__radio = radio  # Se guarda el valor del radio como atributo privado
+
+    # Método para obtener el radio
+    def get_radio(self):  # Define el método get_radio
+        return self.__radio  # Devuelve el valor del radio
+
+    # Método para modificar el radio
+    def set_radio(self, radio):  # Define el método set_radio
+        self.__radio = radio  # Asigna un nuevo valor al radio
+
+    # Método para calcular el área del círculo
+    def calcular_area(self):  # Define el método calcular_area
+        # Retorna el área usando la fórmula: PI * radio * radio
+        return math.pi * self.__radio * self.__radio
+
+    # Método para calcular el perímetro del círculo
+    def calcular_perimetro(self):  # Define el método calcular_perimetro
+        # Retorna el perímetro usando la fórmula: 2 * PI * radio
+        return 2 * math.pi * self.__radio
+
+
+# ============================
+# Clase Rectangulo
+# ============================
+class Rectangulo:  # Se define la clase Rectangulo
+    # Constructor de la clase
+    def __init__(self, base, altura):  # Método que se ejecuta al crear el objeto
+        self.__base = base  # Se guarda el valor de la base com
