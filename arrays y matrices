@@ -1,0 +1,58 @@
+using System; 
+// Importa el espacio de nombres System, que permite usar clases básicas
+// como Console para mostrar información en pantalla.
+
+namespace EjemploClasesArrays
+// Define un espacio de nombres que organiza el código y evita conflictos
+// con otros programas o librerías.
+{
+    // DEFINICIÓN DE LA CLASE
+    class Estudiante
+    // Declara la clase Estudiante, que representa a un estudiante como objeto.
+    {
+        // Atributos de la clase
+        public int Id { get; set; }
+        // Identificador único del estudiante.
+
+        public string Nombres { get; set; }
+        // Almacena los nombres del estudiante.
+
+        public string Apellidos { get; set; }
+        // Almacena los apellidos del estudiante.
+
+        public string Direccion { get; set; }
+        // Guarda la dirección del estudiante.
+
+        // ARREGLO (ARRAY) para almacenar varios teléfonos
+        public string[] Telefonos { get; set; }
+        // Declara un arreglo de tipo string para guardar varios números telefónicos.
+
+        // Método para mostrar la información del estudiante
+        public void MostrarDatos()
+        // Método que imprime en pantalla los datos del estudiante.
+        {
+            Console.WriteLine("---- DATOS DEL ESTUDIANTE ----");
+            // Muestra un título en la consola.
+
+            Console.WriteLine($"ID: {Id}");
+            // Imprime el ID del estudiante.
+
+            Console.WriteLine($"Nombres: {Nombres}");
+            // Imprime los nombres del estudiante.
+
+            Console.WriteLine($"Apellidos: {Apellidos}");
+            // Imprime los apellidos del estudiante.
+
+            Console.WriteLine($"Dirección: {Direccion}");
+            // Imprime la dirección del estudiante.
+
+            Console.WriteLine("Teléfonos:");
+            // Indica que a continuación se mostrarán los teléfonos.
+
+            // Recorrido del array
+            for (int i = 0; i < Telefonos.Length; i++)
+            // Bucle que recorre el arreglo de teléfonos.
+            {
+                Console.WriteLine($"Teléfono {i + 1}: {Telefonos[i]}");
+                // Muestra cada número telefónico almacenado en el arreglo.
+            }
